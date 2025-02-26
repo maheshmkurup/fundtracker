@@ -1,0 +1,87 @@
+{%extends 'base.html'%}
+
+{%block main_block%}
+
+<h1>Welcome {{request.user}}</h1>
+<a href="{%url 'signout'%}">Signout</a>
+<a href="{%url 'expense-add'%}">Add Expense</a>
+   <div class="container">
+    <div class="w-25 border border-3 shadow mx-auto p-3">
+        <h4 class="fw-bold">ExpenseTotal : {{total_expense}}</h4>
+    </div>
+   </div>
+
+   <div class="row mt-3">
+    <div class="col-4 p-2 border">
+        <h4 class="text-center fw-bold my-2">Summary</h4>
+        {%for summary in category_summary%}
+            <div class="border rounded-pill p-2 mt-2 d-flex justify-content-around">
+                <div>{{summary.category}}</div> 
+                <div>{{summary.count}}</div> 
+                <div>{{summary.total}}</div>
+            </div>
+        {%endfor%}
+    </div>
+    <div class="col-4">
+        <h4 class="text-center fw-bold my-2">PieChart</h4>
+        <canvas id="myChart"></canvas>
+    </div>
+    <div class="col-4">
+        <h4 class="text-center fw-bold my-2">Bargraph</h4>
+        <canvas id="categoryChart"></canvas>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: [{%for summary in category_summary%} '{{summary.category}}', {%endfor%}],
+      datasets: [{
+        label: '# of Votes',
+        data: [{%for summary in category_summary%} {{summary.total}}, {%endfor%}],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+
+<script>
+    const ctx1 = document.getElementById('categoryChart');
+  
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: [{%for summary in category_summary%} '{{summary.category}}', {%endfor%}],
+        datasets: [{
+          label: 'Count',
+          data: [{%for summary in category_summary%} {{summary.count}}, {%endfor%}],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+
+
+{%endblock%}

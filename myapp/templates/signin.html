@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+
+{%block main_block%}
+
+<div class="container">
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4 border border-2 shadow rounded">
+      <h1>SignIn</h1>
+{%for m in messages%}
+{%endfor%}
+<form action="" method="post">
+
+    {%csrf_token%}
+    {{form}}
+    <button type="submit">Login</button>
+    <a href="{%url 'register'%}">Register</a>
+
+</form>
+    </div>
+    <div class="col-4"></div>
+  </div>
+</div>
+
+{%endblock%}
